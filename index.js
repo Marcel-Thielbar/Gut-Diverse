@@ -34,7 +34,9 @@ const populateItemsDiv = async () => {
     const arrayOfQuantities = allItems.map(item => Number(item.quantity)); // Convert quantities to numbers
     const totalQuantity = arrayOfQuantities.reduce((a, b) => a + b, 0);
 
-    totalDiversityScoreDiv.innerText = 'Total Diversity Score: ' + totalQuantity;
+    const totalItems = allItems.length;
+    itemsDiv.innerHTML += `<p>Total Items: ${totalItems}</p>`;
+    totalDiversityScoreDiv.innerText = 'Total Diversity Score: ' + totalItems;
 }
 
 
