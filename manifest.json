@@ -23,7 +23,7 @@
     ],
     "theme_color": "#FFFFFF",
     "background_color": "#FFFFFF",
-    "start_url": "/Gut_Diversity_app/",
+    "start_url": "/Gut-Diverse/",
     "display": "standalone",
     "orientation": "portrait"
     }
