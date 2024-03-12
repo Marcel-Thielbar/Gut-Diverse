@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="manifest" href="./manifest.json">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<title>GutDiverse</title>
+	<link rel="icon" href="./assets/gutDiverseIcon.png.192x192.png">
+	<link rel="stylesheet" href="./index.css">
+	
+	<script src="./dexie.min.js"></script>
+	<script>
+if ('serviceWorker' in navigator){
+	window.addEvenetListener('load', () => {
+		navigator.serviceWorker.register('./sw.js');
+	});
+}
+	</script>
+</head>
+<body>
+<nav>
+	<p>My Gut Diversity</p>
+</nav>
+	<div class="container">
+		<form id="itemForm">
+
+		<label>
+			Name of Item:
+			<input type="text", id="nameInput" required>
+		</label>
+
+		<label>
+			Quantity:
+			<input type="text", id="quantityInput">
+		</label>
+
+		<button type="submit" id="addItemButton">
+			Add item
+		</button>
+
+		</form>
+	</div>
+
+	<div id="itemsDiv"></div> <!-- Corrected ID here -->
+	<div id="totalDiversityScoreDiv"></div>
+
+	<script src="./index.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+* {
+  margin: unset;
+  padding:unset;
+}
+
+
+body {
+background: #f2f2f2
+}
+
+nav {
+  background:#50bf32;
+  height: 3rem;
+  line-height: 3rem;
+  color: white;
+  padding-left: 2rem;
+  margin-bottom: 1 rem;
+}
+
+.container {
+  padding: 1rem;
+}
+
+#itemForm label {
+display:block;
+margin-bottom:1rem;
+}
+
+#itemForm input {
+  height:2rem;
+  text-align: center;
+  border: 1px solid #bfbfbf;
+  
+}
+
+#addItemButton {
+  border:unset;
+  background: #00805a;
+  color: #fff;
+  padding:0.5rem;
+}
+
+#itemsDiv {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  background: #eaeaea;
+  margin-bottom: 0.5rem;
+}
+
+.checkbox {
+  height:100%;
+  width:2.5rem;
+}
+
+.itemInfor {
+  text-align: center;
+}
+
+.deleteButton {
+  margin: 0 0 0 auto;
+  border: unset;
+  background: #750000;
+  color: #fff;
+  font-size: 0.8rem;
+  width: 2.5rem;
+  height: 100%
+}
+
+.deleteButton:active {
+  margin-top: 3px;
+  background: #3f0000
+}
+
+.eaten {
+  background: #00805a;
+  color: #fff;
+}
+
+.eaten e {
+  text-decoration: line-through;
+}
