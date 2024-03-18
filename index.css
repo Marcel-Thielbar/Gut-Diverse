@@ -2,7 +2,9 @@
   margin: unset;
   padding:unset;
 }
-
+ html {
+   min-height: 100vh;
+ }
 
 body {
   background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
