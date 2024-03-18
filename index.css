@@ -17,14 +17,12 @@ body {
     background-position: center; /* Center the background image */
     background-repeat: no-repeat; /* Prevent the background image from repeating */
 }
-
 nav {
-  background:#50bf32;
-  height: 3rem;
-  line-height: 3rem;
-  color: white;
-  padding-left: 2rem;
-  margin-bottom: 1 rem;
+  background-image: url('./assets/Banner_Background_1.jpg');
+  background-size: cover; /* Ensure the background image covers the entire back */
+  background-position: center; /* Center the background image */
+  background-repeat: no-repeat; /* Prevent the background image from repeating */
+
 }
 
 .container {
