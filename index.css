@@ -2,15 +2,20 @@
   margin: unset;
   padding:unset;
 }
- html {
-   min-height: 100vh;
- }
+
+html{
+    background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
+    background-size: cover; /* Ensure the background image covers the entire back */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+  
+}
 
 body {
-  background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
-  background-size: cover; /* Ensure the background image covers the entire back */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
+    background-size: cover; /* Ensure the background image covers the entire back */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
 }
 
 nav {
@@ -131,6 +136,11 @@ font-family: "Patrick Hand", cursive;
   background: #00805a;
   color: #fff;
 }
+
+.eaten e {
+  text-decoration: line-through;
+}
+
 
 .eaten e {
   text-decoration: line-through;
