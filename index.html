@@ -12,7 +12,7 @@
 	<script src="./dexie.min.js"></script>
 	<script>
 if ('serviceWorker' in navigator){
-	window.addEvenetListener('load', () => {
+	window.addEventListener('load', () => {
 		navigator.serviceWorker.register('./sw.js');
 	});
 }
@@ -42,7 +42,9 @@ if ('serviceWorker' in navigator){
 		</form>
 	</div>
 
-	<div id="itemsDiv"></div> <!-- Corrected ID here -->
+	<div id="itemsDiv">
+		
+	</div> <!-- Corrected ID here -->
 	<div id="totalDiversityScoreDiv"></div>
 
 	<script src="./index.js"></script>
