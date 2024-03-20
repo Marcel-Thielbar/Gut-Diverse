@@ -3,20 +3,17 @@
   padding: 0;
 }
 
-html{
-    background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
-    background-size: cover; /* Ensure the background image covers the entire back */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
-  
+html, body {
+  background-image: url('./assets/HD_Back.avif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-body {
-    background-image: url('./assets/HD-wallpaper-green-grass-field-during-daytime.jpg'); /* Replace 'path/to/your/image.jpg' with the path to your image */
-    background-size: cover; /* Ensure the background image covers the entire back */
-    background-position: center; /* Center the background image */
-    background-repeat: no-repeat; /* Prevent the background image from repeating */
-}
 nav {
   height: 3rem;
   line-height: 3rem;
