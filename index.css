@@ -15,6 +15,7 @@ html, body {
 }
 
 nav {
+  position: relative; /* Ensure nav doesn't overlap with the selector */
   height: 3rem;
   line-height: 3rem;
   color: white;
@@ -26,9 +27,16 @@ nav {
   background-repeat: no-repeat; /* Prevent the background image from repeating */
   font-family: "Patrick Hand", cursive;
 }
+#weekSelector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000; /* Ensure it's above other elements */
+}
 
 .container {
   color:white;
+  padding-top: 2rem; /* Add padding to the top to make space for the selector */
 }
 
 #itemForm label {
@@ -141,6 +149,41 @@ font-family: "Patrick Hand", cursive;
   text-decoration: line-through;
 }
 
+
+.eaten e {
+  text-decoration: line-through;
+}
+
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+
+
+
+.itemInfor {
+  text-align: center;
+}
+
+.deleteButton {
+  margin: 0 0 0 auto;
+  border: unset;
+  background: #750000;
+  color: #fff;
+  font-size: 0.8rem;
+  width: 2.5rem;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.deleteButton:active {
+  margin-top: 3px;
+  background: #3f0000
+}
+
+.eaten {
+  background: #00805a;
+  color: #fff;
+}
 
 .eaten e {
   text-decoration: line-through;
