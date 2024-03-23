@@ -175,3 +175,7 @@ const removeItem = async (id) =>{
     await db.items.delete(id);
     await populateItemsDiv();
 };
+
+    await db.items.delete(id);
+    await populateItemsDiv();
+};
