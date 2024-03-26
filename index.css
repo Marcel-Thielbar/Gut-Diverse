@@ -10,74 +10,72 @@ html, body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   height: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 nav {
-  position: relative; /* Ensure nav doesn't overlap with the selector */
+  position: relative;
   height: 3rem;
   line-height: 3rem;
   color: white;
   padding-left: 2rem;
-  margin-bottom: 1 rem;
+  margin-bottom: 1rem;
   background-image: url('./assets/Banner_Background_1.jpg');
-  background-size: cover; /* Ensure the background image covers the entire back */
-  background-position: center; /* Center the background image */
-  background-repeat: no-repeat; /* Prevent the background image from repeating */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   font-family: "Patrick Hand", cursive;
 }
+
 #weekSelector {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  z-index: 1000; /* Ensure it's above other elements */
+  z-index: 1000;
 }
 
 .container {
-  color:white;
-  padding-top: 2rem; /* Add padding to the top to make space for the selector */
+  color: white;
+  padding-top: 2rem;
 }
 
 #itemForm label {
-display:block;
-margin-bottom:1rem;
+  display: block;
+  margin-bottom: 1rem;
 }
 
 #itemForm input {
-  height:2rem;
+  height: 2rem;
   text-align: center;
   border: 1px solid #bfbfbf;
-  
 }
 
 #addItemButton {
-  border:unset;
+  border: unset;
   background: #00805a;
   color: #fff;
-  padding:0.5rem;
+  padding: 0.5rem;
 }
 
 #itemsDiv {
   margin-top: 3rem;
   margin-bottom: 2rem;
-  color:white;
+  color: white;
   font-family: "Patrick Hand", cursive;
 }
+
 #totalDiversityScoreDiv {
-color:white;
-font-family: "Patrick Hand", cursive;
+  color: white;
+  font-family: "Patrick Hand", cursive;
 }
 
 .item {
-  color:black;
+  color: black;
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   background: white;
   border-radius: 999px;
   margin-bottom: 0.5rem;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
-  rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
 }
 
 .checkbox {
@@ -118,9 +116,7 @@ font-family: "Patrick Hand", cursive;
   align-items: center; /* Center vertically */
 }
 
-
-
-.itemInfor {
+.itemInfo {
   text-align: center;
 }
 
@@ -137,7 +133,7 @@ font-family: "Patrick Hand", cursive;
 
 .deleteButton:active {
   margin-top: 3px;
-  background: #3f0000
+  background: #3f0000;
 }
 
 .eaten {
@@ -148,43 +144,37 @@ font-family: "Patrick Hand", cursive;
 .eaten e {
   text-decoration: line-through;
 }
-
-
-.eaten e {
-  text-decoration: line-through;
+#diverseFoodList {
+  position: absolute;
+  top: 3rem; /* Adjust according to your nav height */
+  right: 1rem;
+  z-index: 1000;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-  display: flex;
-  align-items: center; /* Center vertically */
+#diverseFoodDropdown {
+  width: 200px; /* Adjust width as needed */
+  padding: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-
-
-.itemInfor {
-  text-align: center;
+#diverseFoodDropdown option {
+  padding: 0.5rem;
 }
 
-.deleteButton {
-  margin: 0 0 0 auto;
-  border: unset;
-  background: #750000;
-  color: #fff;
-  font-size: 0.8rem;
-  width: 2.5rem;
-  height: 100%;
-  border-radius: 999px;
+#diverseFoodList button {
+  display: block;
+  background-color: #00805a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.deleteButton:active {
-  margin-top: 3px;
-  background: #3f0000
-}
-
-.eaten {
-  background: #00805a;
-  color: #fff;
-}
-
-.eaten e {
-  text-decoration: line-through;
+#diverseFoodList button:hover {
+  background-color: #00583d;
 }
