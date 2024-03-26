@@ -12,8 +12,7 @@ const initDatabase = async (week) => {
     }
 
     return db;
-}
-
+};
 
 const itemForm = document.getElementById('itemForm');
 const itemsDiv = document.getElementById('itemsDiv');
@@ -23,23 +22,23 @@ const totalDiversityScoreDiv = document.getElementById('totalDiversityScoreDiv')
 const totalDiversityScores = {};
 
 // Array of diverse food items
-const diverseFoodList = [
+let diverseFoodList = [
     // Fermented Foods
-    'Yogurt', 'Kefir', 'Kimchi', 'Sauerkraut', 'Miso', 'Tempeh', 'Kombucha',
+    'yogurt', 'kefir', 'kimchi', 'sauerkraut', 'miso', 'tempeh', 'kombucha',
     // Fiber-Rich Foods
-    'Whole grains', 'Oats', 'Barley', 'Quinoa', 'Brown rice', 'Legumes', 'Beans', 'Lentils', 'Chickpeas', 'Fruits', 'Berries', 'Apples', 'Bananas', 'Vegetables', 'Broccoli', 'Spinach', 'Carrots', 'Nuts and seeds', 'Almonds', 'Chia seeds', 'Flaxseeds',
+    'whole grains', 'oats', 'barley', 'quinoa', 'brown rice', 'legumes', 'beans', 'lentils', 'chickpeas', 'fruits', 'berries', 'apples', 'bananas', 'vegetables', 'broccoli', 'spinach', 'carrots', 'nuts and seeds', 'almonds', 'chia seeds', 'flaxseeds',
     // Polyphenol-Rich Foods
-    'Blueberries', 'Strawberries', 'Raspberries', 'Red grapes', 'Green tea', 'Dark chocolate',
+    'blueberries', 'strawberries', 'raspberries', 'red grapes', 'green tea', 'dark chocolate',
     // Omega-3 Fatty Acid-Rich Foods
-    'Fatty fish', 'Salmon', 'Mackerel', 'Sardines', 'Walnuts',
+    'fatty fish', 'salmon', 'mackerel', 'sardines', 'walnuts',
     // Protein Sources
-    'Tofu',
+    'tofu',
     // Polyunsaturated Fats
-    'Avocado', 'Olive oil',
+    'avocado', 'olive oil',
     // Prebiotic Supplements
-    'Prebiotic supplements',
+    'prebiotic supplements',
     // Herbs and Spices
-    'Turmeric', 'Ginger', 'Garlic', 'Cinnamon', 'Rosemary', 'Thyme'
+    'turmeric', 'ginger', 'garlic', 'cinnamon', 'rosemary', 'thyme'
 ];
 
 let totalDiversityScore = 0;
@@ -49,7 +48,17 @@ const populateItemsDiv = async () => {
     const db = await initDatabase(currentWeek); // Initialize database for current week
     const allItems = await db.items.reverse().toArray();
 
+    // Filter items that are eaten and belong to the diverse food list
     const checkedItems = allItems.filter(item => item.isEaten && diverseFoodList.includes(item.name));
+
+    // Initialize total diversity score for the current week if not already initialized
+    if (totalDiversityScores[currentWeek] === undefined) {
+        totalDiversityScores[currentWeek] = checkedItems.length;
+    } else {
+        // Recalculate total diversity score if it's already initialized
+        totalDiversityScores[currentWeek] = checkedItems.length;
+        await updateTotalDiversityScore(); // Update the total diversity score
+    }
 
     itemsDiv.innerHTML = allItems.map(item => `
         <div class="item ${item.isEaten && 'eaten'}">
@@ -66,20 +75,56 @@ const populateItemsDiv = async () => {
         </div>
     `).join("");
 
+    // Check if diverseFoodList is available in local storage
+
+    const storedDiverseFoodList = localStorage.getItem('diverseFoodList');
+    if (storedDiverseFoodList) {
+        // Parse the stored diverseFoodList from local storage
+        const storedList = JSON.parse(storedDiverseFoodList);
+        
+        // Concatenate each item from the stored list to DropdownList
+        const uniqueItemsSet = new Set([...storedList, ...diverseFoodList]);
+        diverseFoodList = Array.from(uniqueItemsSet); // Update diverseFoodList with unique items
+
+        // Sort the diverseFoodList alphabetically
+        diverseFoodList.sort();
+
+        // Create the DropdownList HTML string
+        const DropdownList = diverseFoodList.map(item => `
+            <option value="${item}">${item}</option>
+        `).join("");
+
+        // Display diverse food list with options to add/remove items
+        itemsDiv.innerHTML += `
+            <div id="diverseFoodList">
+                <p><strong>Diverse Food List:</strong></p>
+                <select id="diverseFoodDropdown" onchange="selectDiverseFood()">
+                    <option value="">Select an item...</option>
+                    ${DropdownList}
+                </select>
+                <button onclick="addItemToList()">Add New Item</button>
+                <button onclick="removeItemFromList()">Remove Selected Item</button>
+            </div>
+        `;
+    }
+
     const totalItems = allItems.length;
     itemsDiv.innerHTML += `<p>Total Items on list: ${totalItems}</p>`;
-    totalDiversityScoreDiv.innerText = 'Total Diversity Score: ' + totalDiversityScores[currentWeek];
-}
 
+    // Update total diversity score display for the current week
+    updateTotalDiversityScoreDisplay();
+};
+
+// Load total diversity scores from local storage on window load
 window.onload = async () => {
     await populateItemsDiv(); // Populate items for the default week on window load
-    updateTotalDiversityScoreDisplay(); // Update total diversity score display for the default week
-}
+};
+
 
 itemForm.onsubmit = async (event) => {
     event.preventDefault();
 
-    const name = document.getElementById("nameInput").value;
+    const name = document.getElementById("nameInput").value.toLowerCase(); // Convert to lowercase
     const quantityInput = document.getElementById("quantityInput");
     const quantity = Number(quantityInput.value);
 
@@ -95,24 +140,28 @@ itemForm.onsubmit = async (event) => {
     await populateItemsDiv(); // Populate items for the current week after adding item
 };
 
-// Modify toggle item status function and remove item function to work with the current week's database
+// Modify toggle item status function to compare item names in a case-insensitive manner
 const toggleItemStatus = async (event, id) => {
     const db = await initDatabase(currentWeek); // Initialize database for current week
     const item = await db.items.get(id);
     if (!item) return;
 
+    const itemNameLowerCase = item.name.toLowerCase(); // Convert item name to lowercase
+
     // Update the isEaten status
     await db.items.update(id, { isEaten: !!event.target.checked });
+
     // Update the total diversity score if the item is in diverse food list
-    const itemNameLowerCase = item.name.toLowerCase(); // Convert item name to lowercase
-    if (event.target.checked && diverseFoodList.map(food => food.toLowerCase()).includes(itemNameLowerCase)) {
-        totalDiversityScores[currentWeek]++;
-    } else if (!event.target.checked && diverseFoodList.map(food => food.toLowerCase()).includes(itemNameLowerCase)) {
-        totalDiversityScores[currentWeek]--;
+    if (diverseFoodList.map(food => food.toLowerCase()).includes(itemNameLowerCase)) {
+        const delta = event.target.checked ? 1 : -1;
+        totalDiversityScores[currentWeek] += delta;
+        updateTotalDiversityScoreDisplay();
     }
 
     await populateItemsDiv();
-}
+};
+
+
 
 // Modify remove item function to work with the current week's database
 const removeItem = async (id) => {
@@ -143,23 +192,97 @@ const changeWeek = async () => {
 const updateTotalDiversityScore = async () => {
     const db = await initDatabase(currentWeek); // Initialize database for current week
     const allItems = await db.items.toArray();
-    let newTotalDiversityScore = 0; // Initialize the new total diversity score
 
-    // Calculate the new total diversity score incrementally
-    for (const item of allItems) {
-        if (item.isEaten && diverseFoodList.includes(item.name)) {
-            newTotalDiversityScore++; // Increment the score for each checked diverse item
-        }
-        
-    }
+    // Filter items that are eaten and belong to the diverse food list
+    const eatenDiverseItems = allItems.filter(item => item.isEaten && diverseFoodList.includes(item.name));
 
-    totalDiversityScores[currentWeek] = newTotalDiversityScore; // Update total diversity score for the current week
-    updateTotalDiversityScoreDisplay(); // Update total diversity score display for the current week
+    // Count the total number of eaten diverse items
+    const currentTotalDiversityScore = eatenDiverseItems.length;
+
+    // Update total diversity score for the current week
+    totalDiversityScores[currentWeek] = currentTotalDiversityScore;
+
+    // Update total diversity score display for the current week
+    updateTotalDiversityScoreDisplay();
+
+    // Update local storage with the updated total diversity scores
+    localStorage.setItem('totalDiversityScores', JSON.stringify(totalDiversityScores));
 };
 
 // Function to update the total diversity score display for the current week
 const updateTotalDiversityScoreDisplay = () => {
     const totalDiversityScoreDiv = document.getElementById('totalDiversityScoreDiv');
-    const currentTotalDiversityScore = totalDiversityScores[currentWeek] || 0;
+    const currentTotalDiversityScore = totalDiversityScores[currentWeek];
     totalDiversityScoreDiv.innerText = 'Total Diversity Score: ' + currentTotalDiversityScore;
-}
+};
+
+// Function to add a new item to the diverse food list
+const addItemToList = () => {
+    const newItemName = prompt("Enter the name of the new diverse food item:");
+    if (newItemName) {
+        const trimmedItemName = newItemName.trim().toLowerCase(); // Convert to lowercase
+        if (!diverseFoodList.some(item => item.toLowerCase() === trimmedItemName)) { // Check for existing item in a case-insensitive manner
+            diverseFoodList.push(newItemName); // Push the original name
+            // Save the updated diverse food list to local storage
+            localStorage.setItem('diverseFoodList', JSON.stringify(diverseFoodList));
+            
+            // Refresh the diverse food dropdown to include the newly added item
+            const dropdown = document.getElementById('diverseFoodDropdown');
+            const option = document.createElement('option');
+            option.value = newItemName;
+            option.textContent = newItemName;
+            dropdown.appendChild(option);
+        } else {
+            alert("Item already exists in the list.");
+        }
+    }
+};
+
+
+// Function to remove an item from the diverse food list
+const removeItemFromList = async () => {
+    const dropdown = document.getElementById('diverseFoodDropdown');
+    const selectedOption = dropdown.options[dropdown.selectedIndex];
+    const itemName = selectedOption.value;
+
+    const index = diverseFoodList.findIndex(item => item.toLowerCase() === itemName.toLowerCase()); // Find index in a case-insensitive manner
+    if (index !== -1) {
+        // Remove the item from the diverse food list array
+        diverseFoodList.splice(index, 1);
+
+        // Remove the item from the dropdown list
+        dropdown.remove(dropdown.selectedIndex);
+
+        // Save the updated diverse food list to local storage
+        localStorage.setItem('diverseFoodList', JSON.stringify(diverseFoodList));
+        
+        console.log(`Item '${itemName}' removed from diverse food list and local storage.`);
+    } else {
+        console.error(`Item '${itemName}' not found in diverse food list.`);
+    }
+};
+
+// Function to load diverse food list from local storage upon page load
+const loadDiverseFoodList = () => {
+    let storedDiverseFoodList = localStorage.getItem('diverseFoodList');
+    if (!storedDiverseFoodList) {
+        // Set default diverse food list
+        storedDiverseFoodList = JSON.stringify(diverseFoodList);
+        localStorage.setItem('diverseFoodList', storedDiverseFoodList);
+    } else {
+        // Parse and set the diverse food list from local storage
+        diverseFoodList = JSON.parse(storedDiverseFoodList);
+    }
+    
+    // Populate the dropdown with stored diverse food items
+    const dropdown = document.getElementById('diverseFoodDropdown');
+    dropdown.innerHTML = ""; // Clear existing options before populating
+    diverseFoodList.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        dropdown.appendChild(option);
+    });
+};
+// Call the function to load diverse food list upon page load
+loadDiverseFoodList();
