@@ -1,59 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="manifest" href="./manifest.json">
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	
-	<title>GutDiverse</title>
-	<link rel="icon" href="./assets/gutDiverseIcon.png.192x192.png">
-	<link rel="stylesheet" href="./index.css">
-	
-	<script src="./dexie.min.js"></script>
-	<script>
-if ('serviceWorker' in navigator){
-	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('./sw.js');
-	});
-}
-	</script>
+    <link rel="manifest" href="./manifest.json">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>GutDiverse</title>
+    <link rel="icon" href="./assets/gutDiverseIcon.png.192x192.png">
+    <link rel="stylesheet" href="./index.css">
+    
+    <script src="./dexie.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator){
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+    </script>
 </head>
 <body>
-<nav>
-	<p>My Gut Diversity</p>
-	<select id="weekSelector">
-		<option value="week1">Week 1</option>
-		<option value="week2">Week 2</option>
-		<!-- Add more options for additional weeks if needed -->
-	  </select>	  
-</nav>
-	<div class="container">
-		<form id="itemForm">
+    <nav>
+        <p>My Gut Diversity</p>
+        <select id="weekSelector" onchange="changeWeek()">
+            <option value="week1">Week 1</option>
+            <option value="week2">Week 2</option>
+            <!-- Add more options for additional weeks if needed -->
+        </select>
+    </nav>
+    <div class="container">
+        <form id="itemForm">
+            <label>
+                Name of Item:
+                <input type="text" id="nameInput" required>
+            </label>
+            <label>
+                Quantity:
+                <input type="text" id="quantityInput">
+            </label>            
+            <button type="submit" id="addItemButton">
+                Add item
+            </button>
+        </form>
+    </div>
 
-		<label>
-			Name of Item:
-			<input type="text", id="nameInput" required>
-		</label>
+    <div id="itemsDiv">
+        
+    </div>
+    <div id="totalDiversityScoreDiv"></div>
 
-		<label>
-			Quantity:
-			<input type="text", id="quantityInput">
-		</label>
-
-		<button type="submit" id="addItemButton">
-			Add item
-		</button>
-
-		</form>
-	</div>
-
-	<div id="itemsDiv">
-		
-	</div> <!-- Corrected ID here -->
-	<div id="totalDiversityScoreDiv"></div>
-
-	<script src="./index.js"></script>
-
+    <script src="./index.js"></script>
 </body>
 </html>
-
