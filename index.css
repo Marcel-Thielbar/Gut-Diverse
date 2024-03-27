@@ -32,6 +32,22 @@ nav {
   right: 1rem;
   z-index: 1000;
 }
+#diverseFoodButton {
+  position: absolute;
+  top: 3rem; /* Adjust according to your nav height */
+  right: 1rem;
+  z-index: 1000;
+  background-color: #00805a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#diverseFoodButton:hover {
+  background-color: #00583d;
+}
 
 .container {
   color: white;
@@ -41,13 +57,15 @@ nav {
 #itemForm label {
   display: block;
   margin-bottom: 1rem;
+  color:#000
 }
 
 #itemForm input {
   height: 2rem;
   text-align: center;
-  border: 1px solid #bfbfbf;
+  border: 1px solid #000000;
 }
+
 
 #addItemButton {
   border: unset;
@@ -59,12 +77,12 @@ nav {
 #itemsDiv {
   margin-top: 3rem;
   margin-bottom: 2rem;
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: "Patrick Hand", cursive;
 }
 
 #totalDiversityScoreDiv {
-  color: white;
+  color: rgb(0, 0, 0);
   font-family: "Patrick Hand", cursive;
 }
 
@@ -178,3 +196,5 @@ nav {
 #diverseFoodList button:hover {
   background-color: #00583d;
 }
+
+
