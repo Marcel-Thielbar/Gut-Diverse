@@ -33,7 +33,7 @@
                 Name of Item:
                 <input type="text" id="nameInput" required>
             </label>
-            <label>
+            <label id = "quantityLabel">
                 Quantity:
                 <input type="text" id="quantityInput">
             </label>            
@@ -43,8 +43,11 @@
         </form>
     </div>
 
-    <div id="itemsDiv">
-        
+    <!-- Add button to toggle visibility of the item div -->
+    <button id = diverseFoodButton button onclick="toggleItemDiv()">Edit Diverse List</button>
+
+    <div id="itemsDiv" style="display: none;">
+        <!-- Content for itemsDiv will be populated dynamically -->
     </div>
     <div id="totalDiversityScoreDiv"></div>
 
