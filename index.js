@@ -120,6 +120,21 @@ window.onload = async () => {
     await populateItemsDiv(); // Populate items for the default week on window load
 };
 
+// Function to toggle the visibility of the item div
+const toggleItemDiv = () => {
+    const itemDiv = document.getElementById('itemsDiv');
+    const toggleButton = document.getElementById('diverseFoodButton');
+    if (itemDiv.style.display === 'none') {
+        itemDiv.style.display = 'block';
+        toggleButton.style.top = '13.5rem';
+    }
+        else {
+        itemDiv.style.display = 'none';
+        toggleButton.style.top = '3rem';
+    }
+};
+
+
 
 itemForm.onsubmit = async (event) => {
     event.preventDefault();
