@@ -16,6 +16,7 @@ const initDatabase = async (week) => {
 
 const itemForm = document.getElementById('itemForm');
 const itemsDiv = document.getElementById('itemsDiv');
+const diverseList = document.getElementById('diverseList');
 const totalDiversityScoreDiv = document.getElementById('totalDiversityScoreDiv');
 
 // Object to store total diversity score for each week
@@ -95,7 +96,7 @@ const populateItemsDiv = async () => {
         `).join("");
 
         // Display diverse food list with options to add/remove items
-        itemsDiv.innerHTML += `
+        diverseList.innerHTML += `
             <div id="diverseFoodList">
                 <p><strong>Diverse Food List:</strong></p>
                 <select id="diverseFoodDropdown" onchange="selectDiverseFood()">
@@ -121,15 +122,15 @@ window.onload = async () => {
 };
 
 // Function to toggle the visibility of the item div
-const toggleItemDiv = () => {
-    const itemDiv = document.getElementById('itemsDiv');
+const toggleDiverseDiv = () => {
+    const diverseDiv = document.getElementById('diverseList');
     const toggleButton = document.getElementById('diverseFoodButton');
-    if (itemDiv.style.display === 'none') {
-        itemDiv.style.display = 'block';
+    if (diverseDiv.style.display === 'none') {
+        diverseDiv.style.display = 'block';
         toggleButton.style.top = '13.5rem';
     }
         else {
-        itemDiv.style.display = 'none';
+        diverseDiv.style.display = 'none';
         toggleButton.style.top = '3rem';
     }
 };
