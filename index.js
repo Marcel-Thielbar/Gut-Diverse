@@ -46,18 +46,18 @@ let totalDiversityScore = 0;
 
 // Function to populate items div for the current week
 const populateItemsDiv = async () => {
-    const db = await initDatabase(currentWeek); // Initialize database for current week
+    const db = await initDatabase(currentDay); // Initialize database for current week
     const allItems = await db.items.reverse().toArray();
 
     // Filter items that are eaten and belong to the diverse food list
     const checkedItems = allItems.filter(item => item.isEaten && diverseFoodList.includes(item.name));
 
     // Initialize total diversity score for the current week if not already initialized
-    if (totalDiversityScores[currentWeek] === undefined) {
-        totalDiversityScores[currentWeek] = checkedItems.length;
+    if (totalDiversityScores[currentDay] === undefined) {
+        totalDiversityScores[currentDay] = checkedItems.length;
     } else {
         // Recalculate total diversity score if it's already initialized
-        totalDiversityScores[currentWeek] = checkedItems.length;
+        totalDiversityScores[currentDay] = checkedItems.length;
         await updateTotalDiversityScore(); // Update the total diversity score
     }
 
@@ -108,18 +108,18 @@ const populateItemsDiv = async () => {
             </div>
         `;
     }
-
-    const totalItems = allItems.length;
-    itemsDiv.innerHTML += `<p>Total Items on list: ${totalItems}</p>`;
-
-    // Update total diversity score display for the current week
-    updateTotalDiversityScoreDisplay();
 };
 
 // Load total diversity scores from local storage on window load
 window.onload = async () => {
+    const selectedDay = localStorage.getItem('selectedDay');
+    if (selectedDay) {
+        currentDay = selectedDay;
+        document.getElementById('daySelector').value = currentDay;
+    }
     await populateItemsDiv(); // Populate items for the default week on window load
 };
+
 
 // Function to toggle the visibility of the item div
 const toggleDiverseDiv = () => {
@@ -127,14 +127,13 @@ const toggleDiverseDiv = () => {
     const toggleButton = document.getElementById('diverseFoodButton');
     if (diverseDiv.style.display === 'none') {
         diverseDiv.style.display = 'block';
-        toggleButton.style.top = '13.5rem';
+        toggleButton.style.top = '15.3rem';
     }
         else {
         diverseDiv.style.display = 'none';
         toggleButton.style.top = '3rem';
     }
 };
-
 
 
 itemForm.onsubmit = async (event) => {
@@ -150,7 +149,7 @@ itemForm.onsubmit = async (event) => {
         return;
     }
 
-    const db = await initDatabase(currentWeek); // Initialize database for current week
+    const db = await initDatabase(currentDay); // Initialize database for current week
     await db.items.add({ name, quantity, isEaten: false });
     itemForm.reset();
     await populateItemsDiv(); // Populate items for the current week after adding item
@@ -158,7 +157,7 @@ itemForm.onsubmit = async (event) => {
 
 // Modify toggle item status function to compare item names in a case-insensitive manner
 const toggleItemStatus = async (event, id) => {
-    const db = await initDatabase(currentWeek); // Initialize database for current week
+    const db = await initDatabase(currentDay); // Initialize database for current week
     const item = await db.items.get(id);
     if (!item) return;
 
@@ -170,7 +169,7 @@ const toggleItemStatus = async (event, id) => {
     // Update the total diversity score if the item is in diverse food list
     if (diverseFoodList.map(food => food.toLowerCase()).includes(itemNameLowerCase)) {
         const delta = event.target.checked ? 1 : -1;
-        totalDiversityScores[currentWeek] += delta;
+        totalDiversityScores[currentDay] += delta;
         updateTotalDiversityScoreDisplay();
     }
 
@@ -181,32 +180,36 @@ const toggleItemStatus = async (event, id) => {
 
 // Modify remove item function to work with the current week's database
 const removeItem = async (id) => {
-    const db = await initDatabase(currentWeek); // Initialize database for current week
+    const db = await initDatabase(currentDay); // Initialize database for current week
     const item = await db.items.get(id);
     if (!item) return;
 
     // Update the total diversity score if the item is in diverse food list
     const itemNameLowerCase = item.name.toLowerCase(); // Convert item name to lowercase
     if (diverseFoodList.map(food => food.toLowerCase()).includes(itemNameLowerCase) && item.isEaten) {
-        totalDiversityScores[currentWeek]--;
+        totalDiversityScores[currentDay]--;
     }
 
     await db.items.delete(id);
     await populateItemsDiv();
 }
 
-let currentWeek = 'week1'; // Default to week 1
+let currentDay = 'Today'; // Default to Today
 
 // Function to change the current week
-const changeWeek = async () => {
-    currentWeek = document.getElementById('weekSelector').value;
+const changeDay = async () => {
+    currentDay = document.getElementById('daySelector').value;
+    localStorage.setItem('selectedDay', currentDay); // Save selected day in local storage
     await populateItemsDiv(); // Populate items for the selected week
     updateTotalDiversityScoreDisplay(); // Update total diversity score display for the selected week
+    
 }
+
+
 
 // Function to recalculate and update total diversity score for the current week
 const updateTotalDiversityScore = async () => {
-    const db = await initDatabase(currentWeek); // Initialize database for current week
+    const db = await initDatabase(currentDay); // Initialize database for current week
     const allItems = await db.items.toArray();
 
     // Filter items that are eaten and belong to the diverse food list
@@ -216,7 +219,7 @@ const updateTotalDiversityScore = async () => {
     const currentTotalDiversityScore = eatenDiverseItems.length;
 
     // Update total diversity score for the current week
-    totalDiversityScores[currentWeek] = currentTotalDiversityScore;
+    totalDiversityScores[currentDay] = currentTotalDiversityScore;
 
     // Update total diversity score display for the current week
     updateTotalDiversityScoreDisplay();
@@ -228,7 +231,7 @@ const updateTotalDiversityScore = async () => {
 // Function to update the total diversity score display for the current week
 const updateTotalDiversityScoreDisplay = () => {
     const totalDiversityScoreDiv = document.getElementById('totalDiversityScoreDiv');
-    const currentTotalDiversityScore = totalDiversityScores[currentWeek];
+    const currentTotalDiversityScore = totalDiversityScores[currentDay];
     totalDiversityScoreDiv.innerText = 'Total Diversity Score: ' + currentTotalDiversityScore;
 };
 
@@ -300,5 +303,31 @@ const loadDiverseFoodList = () => {
         dropdown.appendChild(option);
     });
 };
-// Call the function to load diverse food list upon page load
-loadDiverseFoodList();
+document.addEventListener('DOMContentLoaded', () => {
+    // All your JavaScript code goes here
+    
+    // Define and call the loadDiverseFoodList function
+    const loadDiverseFoodList = () => {
+        let storedDiverseFoodList = localStorage.getItem('diverseFoodList');
+        if (!storedDiverseFoodList) {
+            // Set default diverse food list
+            storedDiverseFoodList = JSON.stringify(diverseFoodList);
+            localStorage.setItem('diverseFoodList', storedDiverseFoodList);
+        } else {
+            // Parse and set the diverse food list from local storage
+            diverseFoodList = JSON.parse(storedDiverseFoodList);
+        }
+        
+        // Populate the dropdown with stored diverse food items
+        const dropdown = document.getElementById('diverseFoodDropdown');
+        dropdown.innerHTML = ""; // Clear existing options before populating
+        diverseFoodList.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item;
+            option.textContent = item;
+            dropdown.appendChild(option);
+        });
+    };
+    
+    loadDiverseFoodList(); // Call the loadDiverseFoodList function after the DOM is loaded
+});
